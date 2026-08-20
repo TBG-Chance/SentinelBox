@@ -1,0 +1,50 @@
+name: Verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
+          cache-dependency-path: go.sum
+
+      - name: Verify dependency checksums
+        run: go mod verify
+
+      - name: Test
+        run: go test ./...
+
+      - name: Test with race detector
+        run: go test -race ./...
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Check generated nftables syntax
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes nftables
+          go run ./cmd/sentinelbox-network render \
+            --config config/sentinelbox.routed.example.toml \
+            --output /tmp/sentinelbox-network-staging
+          sudo nft --check --file /tmp/sentinelbox-network-staging/etc/nftables.d/sentinelbox.nft
+
+      - name: Build Debian target
+        run: |
+          go build -trimpath -o /tmp/sentinelbox ./cmd/sentinelbox
+          go build -trimpath -o /tmp/sentinelbox-network ./cmd/sentinelbox-network

@@ -1,0 +1,59 @@
+version = 1
+
+[server]
+# Keep management loopback-only until the authenticated HTTPS UI milestone.
+listen = "127.0.0.1:8080"
+read_timeout = "10s"
+write_timeout = "15s"
+idle_timeout = "60s"
+shutdown_timeout = "15s"
+health_timeout = "2s"
+
+[database]
+path = "/var/lib/sentinelbox/sentinel.db"
+busy_timeout = "5s"
+max_open_connections = 4
+
+[network]
+enabled = true
+mode = "routed"
+# Replace these with predictable Debian interface names from the appliance.
+wan_interface = "eno1"
+lan_interface = "enx001122334455"
+lan_address = "192.168.50.1/24"
+nft_binary = "/usr/sbin/nft"
+enable_ipv4_forwarding = true
+enable_ipv6_forwarding = false
+
+[dhcp]
+enabled = true
+range_start = "192.168.50.100"
+range_end = "192.168.50.199"
+lease_duration = "12h"
+
+[suricata]
+enabled = false
+eve_path = "/var/log/suricata/eve.json"
+start_position = "end"
+max_event_bytes = 262144
+poll_interval = "500ms"
+
+[risk]
+watch_threshold = 30
+restrict_threshold = 60
+contain_threshold = 80
+correlation_window = "5m"
+recalculation_interval = "30s"
+
+[response]
+automatic_restriction = false
+automatic_containment = false
+containment_requires_manual_release = true
+
+[management]
+bind_lan_only = true
+allow_wan = false
+
+[logging]
+level = "info"
+format = "json"

@@ -1,0 +1,21 @@
+# Build and test output
+/bin/
+/coverage/
+*.coverprofile
+*.test
+
+# Local runtime state
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+sentinelbox.local.toml
+
+# Editor and operating-system files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+/.workspace/

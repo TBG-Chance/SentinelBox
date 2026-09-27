@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/sentinelbox-social-preview.png" alt="SentinelBox — Explainable Network Defense" width="100%">
+  <img src="docs/sentinelbox-social-preview.png" alt="SentinelBox — Explainable Network Defense" width="100%">
 </p>
 
 # SentinelBox
